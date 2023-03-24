@@ -1,13 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import SpentInput from './src/components/SpentInput';
+import SpentCard from './src/components/SpentCard';
 
 export default function App() {
   return (
     <View style={styles.container}>     
-      <SpentInput placeholder={"Digite um valor"}
-      keyBoardType={"number-pad"} 
-      onChangeText={(value) => {console.log(value)}}/>
+      <SpentCard spentName="Aluguel" spentValue="500" onPress={() => console.log("onPress")} onLongPress={() => console.log("OnLongPRess")}/>
     </View>
   );
 }
