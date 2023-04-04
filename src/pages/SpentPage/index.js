@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
-import { FlatList, KeyboardAvoidingView, View } from 'react-native';
+import { FlatList, KeyboardAvoidingView, View, ToastAndroid } from 'react-native';
 import SpentInput from '../../components/SpentInput';
 import SpentButton from '../../components/SpentButton';
 import SpentCard from '../../components/SpentCard';
+import { object, string, number } from 'yup';
 
 import { styles } from './style';
 
 
 export default function SpentPage() {
+
+    const schema = object({
+        spentName: string()
+        .required("O nome do gasto não pode ser vazio."),
+        spentValue: number()
+        .required("O valor do gasto não pode ser vazio.")
+        .positive("O valor do gasto deve ser um número positivo.")
+    })
 
     const [data, setData] = useState(
         [
@@ -34,15 +43,20 @@ export default function SpentPage() {
                 spentValue=value;
             }}/>
 
-            <SpentButton title={"Adicionar"} onPress={() => {
-              
-                const newSpent = {
-                    id: data.length + 1,
+            <SpentButton title={"Adicionar"} onPress={async () => {                            
+
+                const newSpent = {                    
                     spentName: spentName,
                     spentValue: spentValue
                 }
-
-              setData([...data, newSpent]);  
+                
+                try{
+                    await schema.validate(newSpent);
+                    newSpent.id = data.length+1;
+                    setData([...data, newSpent]);  
+                } catch(error){
+                    ToastAndroid.show(error.errors[0], ToastAndroid.SHORT);
+                }            
             }}/>
         </View>
             <View style={styles.list}>
