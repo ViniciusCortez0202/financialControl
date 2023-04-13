@@ -1,15 +1,18 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { View } from 'react-native';
-import AllSpents from '../../pages/AllSpents';
 import SpentPage from '../../pages/SpentPage';
+import TabsRoute from '../Tabs';
 
 const Stack = createStackNavigator();
 
-export default function Stacks() {
+export default function StackRoute() {
  return (
    <Stack.Navigator>
-        <Stack.Screen name='allSpent' component={AllSpents}/>
+        <Stack.Screen
+          options={{
+            headerShown: false
+          }}
+        name='tabs' component={TabsRoute}/>
         <Stack.Screen name='spentPage' component={SpentPage}/>
    </Stack.Navigator>
   );
