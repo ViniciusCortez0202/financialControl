@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet } from 'react-native';
 import { Button } from 'react-native';
 import { Text } from 'react-native';
@@ -6,80 +6,61 @@ import { View } from 'react-native';
 import { SpentContext } from '../../routes/Tabs';
 import SpentInput from '../../components/SpentInput'
 import ModalButton from '../../components/ModalButton';
+import SpentModal from './components/spentModal';
+import { styles } from './style';
+import List from './components/list';
 
 export default function AllSpentsPage({navigation}) {
 
   const {modalVisible, setModalVisible} = React.useContext(SpentContext);
 
+  const [data, setData] = useState([
+    {
+    id: 1,
+    spentName: "Feira",
+    spentValue: 750,
+    },
+    {
+      id: 2,
+      spentName: "Aluguel",
+      spentValue: 850,
+    },
+    {
+      id: 3,
+      spentName: "Carro",
+      spentValue: 1200,
+    },
+    {
+      id: 4,
+      spentName: "Escola",
+      spentValue: 350,
+    }
+  ])
+
+  const onSave = (name) => {
+    const newSpent = {
+      id: data.length+1,
+      spentName: name,
+      spentValue: 0
+    };
+
+    setData([...data, newSpent]);
+  }
+
+  const onRemove = (id) => {
+    const newData = data.filter((elemento) => elemento.id != id);
+    setData(newData);
+  }
+
  return (
-   <View>
+   <View style={styles.container}>
+        <SpentModal modalVisible={modalVisible}
+         setModalVisible={setModalVisible} 
+         onSave={onSave}/>
 
-      <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Insira uma nome para a sua despesa:</Text>
-              <SpentInput placeholder={"EX.: Aluguel"}/>
-             <View style={styles.buttons}>
-                <ModalButton title="Cancelar"
-                style={{backgroundColor: 'red'}}
-                onPress={() => {
-                   setModalVisible(!modalVisible);
-                }}/>
-                <ModalButton title="Confirmar"
-                 style={{backgroundColor: 'green'}}
-                 onPress={() => {
-                  setModalVisible(!modalVisible);
-               }}/>
-             </View>
-            </View>
-          </View>
-        </Modal>
-
-
-        <Text>AllSpetns</Text>
-        <Button title="SpentPage" onPress={() => {
-           navigation.navigate('spentPage')}}/>
+         <List data={data}
+         onRemove={onRemove}
+         navigation={navigation}/>
    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    width: 275,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  buttons: {
-    flexDirection: 'row',
-  }
-});

@@ -8,7 +8,13 @@ import { object, string, number } from 'yup';
 import { styles } from './style';
 
 
-export default function SpentPage() {
+export default function SpentPage({navigation, route}) {
+
+    React.useEffect(() => {
+        const id = route.params?.id;
+
+        console.log("aqui esta o id: " + id);
+    }, [])
 
     const schema = object({
         spentName: string()
