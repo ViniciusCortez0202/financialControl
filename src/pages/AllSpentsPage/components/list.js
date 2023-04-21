@@ -8,12 +8,13 @@ export default function List({data, onRemove, navigation}) {
    <FlatList
    data={data}
    renderItem={({item}) => <SpentCard
-    spentName={item.spentName}
-    spentValue={item.spentValue}
+    spentName={item.name}
+    spentValue={item.total}
     onLongPress={() => onRemove(item.id)}
     onPress={() => {
         navigation.navigate('spentPage', {
-            id: item.id
+            id: item.id,
+            name: item.name
         });
     }}/>}
     ItemSeparatorComponent={<View style={{height: 10}}/>}
